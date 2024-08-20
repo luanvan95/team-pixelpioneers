@@ -27,6 +27,7 @@ const style = {
   };
 
 import { useRouter } from 'next/navigation';
+
  
 const ProductPerformance = () => {
 
@@ -45,14 +46,18 @@ const ProductPerformance = () => {
     const [productType, setProductType] = React.useState("");
     const [audience, setAudience] = React.useState("");
     const [compaignName, setCompaignName] = React.useState("");
-    
+    const [postImage, setPostImage] = useState({
+      myFile: "",
+    });
+
     const handleCreateCampaign = async () => {
         console.log(companyName);
         console.log(compaignBrief);
         console.log(productName);
         console.log(productType);
         console.log(audience);
-        console.log(compaignName);   
+        console.log(compaignName);
+        console.log(postImage.myFile);  
 
         const rawResponse = await fetch('https://www.123rf.com/apicore-texttoimage/campaign/create', {
         method: 'POST',
@@ -66,7 +71,8 @@ const ProductPerformance = () => {
             target_audience: audience,
             product_type: productType,
             product_name: productName,
-            campaign_brief: compaignBrief
+            campaign_brief: compaignBrief,
+            base64image: postImage.myFile
         })
         });
         const content = await rawResponse.json();
@@ -76,7 +82,26 @@ const ProductPerformance = () => {
         setOpen(false);
     }
 
+    const convertToBase64 = (file) => {
+      return new Promise((resolve, reject) => {
+        const fileReader = new FileReader();
+        fileReader.readAsDataURL(file);
+        fileReader.onload = () => {
+          resolve(fileReader.result);
+        };
+        fileReader.onerror = (error) => {
+          reject(error);
+        };
+      });
+    };
 
+    const handleFileUpload = async (e) => {
+      const file = e.target.files[0];
+      const base64 = await convertToBase64(file);
+      setPostImage({ ...postImage, myFile: base64 });
+    };
+
+    
 
     useEffect(() => {
         fetch("https://www.123rf.com/apicore-texttoimage/campaign/retrieve/all")
@@ -162,7 +187,18 @@ const ProductPerformance = () => {
             width: "500px"
           }} name='product-audience' value={audience} onChange={(e) => {
             setAudience(e.target.value);
-          }}/><br/> 
+          }}/>
+
+          <br/>
+          
+          <Typography>Product image</Typography>
+          <input
+            id="productImage"
+            type="file"
+            onChange={(e) => handleFileUpload(e)}
+          />
+          
+          <br/> 
          <Button onClick={handleCreateCampaign}>Create</Button>
         </Box>
       </Modal>
