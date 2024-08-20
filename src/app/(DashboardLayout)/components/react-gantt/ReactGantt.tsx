@@ -39,14 +39,7 @@ function addMonths(date, months) {
   return newDate;
 }
 
-const Overview = ({ ds, aiGenerate } = props) => {
-  const [dataSource, setDataSource] = useState(ds);
-  useEffect(()=> {
-    setDataSource(ds);
-    console.log(ds);
-  }, [ds])
- 
-
+const Overview = ({ dataSource } = props) => {
   let CurrentTheme = true;
   let statusStyleColor;
   let priorityStyle;
@@ -595,106 +588,104 @@ const Overview = ({ ds, aiGenerate } = props) => {
   return (
     <div className="control-pane">
       <div className="control-section">
-        {ds && (
-          <GanttComponent
-            id="Overview"
-            dataSource={dataSource}
-            treeColumnIndex={1}
-            allowSelection={true}
-            editSettings={editSettings}
-            highlightWeekends={true}
-            projectStartDate={projectStartDate}
-            projectEndDate={projectEndDate}
-            load={load.bind(this)}
-            taskFields={taskFields}
-            timelineSettings={timelineSettings}
-            labelSettings={labelSettings}
-            splitterSettings={splitterSettings}
-            //   height="100%"
-            gridLines={gridLines}
-            allowFiltering={false}
-            showColumnMenu={true}
+        <GanttComponent
+        id="Overview"
+        dataSource={dataSource}
+        treeColumnIndex={1}
+        allowSelection={true}
+        editSettings={editSettings}
+        highlightWeekends={true}
+        projectStartDate={projectStartDate}
+        projectEndDate={projectEndDate}
+        load={load.bind(this)}
+        taskFields={taskFields}
+        timelineSettings={timelineSettings}
+        labelSettings={labelSettings}
+        splitterSettings={splitterSettings}
+        //   height="100%"
+        gridLines={gridLines}
+        allowFiltering={false}
+        showColumnMenu={true}
+        allowSorting={false}
+        allowResizing={true}
+        toolbar={toolbarOptions}
+        resourceFields={resourceFields}
+        resources={editingResources}
+        allowRowDragAndDrop={false}
+        >
+        <ColumnsDirective>
+            <ColumnDirective
+            field="TaskId"
+            headerText="Task Id"
+            width="180"
+            visible={false}
+            ></ColumnDirective>
+            <ColumnDirective
+            field="TaskName"
+            headerText="Projects"
+            width="250"
+            template={projectTemplate}
+            ></ColumnDirective>
+            <ColumnDirective
+            field="resources"
+            headerText="Assignee"
             allowSorting={false}
-            allowResizing={true}
-            toolbar={toolbarOptions}
-            resourceFields={resourceFields}
-            resources={editingResources}
-            allowRowDragAndDrop={false}
-          >
-            <ColumnsDirective>
-              <ColumnDirective
-                field="TaskId"
-                headerText="Task Id"
-                width="180"
-                visible={false}
-              ></ColumnDirective>
-              <ColumnDirective
-                field="TaskName"
-                headerText="Projects"
-                width="250"
-                template={projectTemplate}
-              ></ColumnDirective>
-              <ColumnDirective
-                field="resources"
-                headerText="Assignee"
-                allowSorting={false}
-                width="140"
-                template={template}
-              ></ColumnDirective>
-              <ColumnDirective
-                field="Status"
-                headerText="Status"
-                minWidth="100"
-                width="120"
-                template={statusTemplate}
-              ></ColumnDirective>
-              <ColumnDirective
-                field="Priority"
-                headerText="Priority"
-                minWidth="80"
-                width="100"
-                template={priorityTemplate}
-              ></ColumnDirective>
+            width="140"
+            template={template}
+            ></ColumnDirective>
+            <ColumnDirective
+            field="Status"
+            headerText="Status"
+            minWidth="100"
+            width="120"
+            template={statusTemplate}
+            ></ColumnDirective>
+            <ColumnDirective
+            field="Priority"
+            headerText="Priority"
+            minWidth="80"
+            width="100"
+            template={priorityTemplate}
+            ></ColumnDirective>
 
-              <ColumnDirective
-                field="TimeLog"
-                headerText="Work Log"
-                width="120"
-              ></ColumnDirective>
-            </ColumnsDirective>
-            {/* <EventMarkersDirective>
-            <EventMarkerDirective
-              day={eventMarkerDay1}
-              label="Q-1 Release"
-            ></EventMarkerDirective>
-          </EventMarkersDirective> */}
-            {/* <HolidaysDirective>
-            <HolidayDirective
-              from="01/01/2024"
-              to="01/01/2024"
-              label="New year Holiday"
-            ></HolidayDirective>
-            <HolidayDirective
-              from="12/25/2023"
-              to="12/26/2023"
-              label="Christmas Holidays"
-            ></HolidayDirective>
-          </HolidaysDirective> */}
-            <Inject
-              services={[
-                Edit,
-                Selection,
-                Toolbar,
-                DayMarkers,
-                ColumnMenu,
-                Filter,
-                Sort,
-                Resize,
-                RowDD,
-              ]}
-            />
-          </GanttComponent>
-        )}
+            <ColumnDirective
+            field="TimeLog"
+            headerText="Work Log"
+            width="120"
+            ></ColumnDirective>
+        </ColumnsDirective>
+        {/* <EventMarkersDirective>
+        <EventMarkerDirective
+            day={eventMarkerDay1}
+            label="Q-1 Release"
+        ></EventMarkerDirective>
+        </EventMarkersDirective> */}
+        {/* <HolidaysDirective>
+        <HolidayDirective
+            from="01/01/2024"
+            to="01/01/2024"
+            label="New year Holiday"
+        ></HolidayDirective>
+        <HolidayDirective
+            from="12/25/2023"
+            to="12/26/2023"
+            label="Christmas Holidays"
+        ></HolidayDirective>
+        </HolidaysDirective> */}
+        <Inject
+            services={[
+            Edit,
+            Selection,
+            Toolbar,
+            DayMarkers,
+            ColumnMenu,
+            Filter,
+            Sort,
+            Resize,
+            RowDD,
+            ]}
+        />
+        </GanttComponent>
       </div>
       <EditDialog open={open} onClose={handleClose} data={dialogData} />
     </div>

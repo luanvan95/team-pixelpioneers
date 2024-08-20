@@ -6,12 +6,13 @@ import ReactGantt from "@/app/(DashboardLayout)/components/react-gantt/ReactGant
 import PsychologyIcon from "@mui/icons-material/Psychology";
 import { overviewData, overviewAIData } from "@/data/overviewData";
 import { useEffect, useLayoutEffect, useState } from "react";
+import LoadingPopup from "@/app/(DashboardLayout)/components/shared/LoadingPopup";
 
 const SamplePage2 = () => {
   const [ready, setReady] = useState(false);
-  const [dataSource, setDataSource] = useState({});
   const [displayButton, setDisplayButton] = useState(true);
- 
+  const [isPopupOpen, setPopupOpen] = useState(false);
+
   const handleClick = () => {
     const confirmed = window.confirm(
       "Are you sure you want to perform this action?"
@@ -19,24 +20,25 @@ const SamplePage2 = () => {
 
     // If the user clicks "OK", proceed with setting the data
     if (confirmed) {
-      setDataSource(overviewAIData);
+      setPopupOpen(true);
       setDisplayButton(false);
     }
   };
 
-  useLayoutEffect(() => {
-    setDataSource(dataSource);
-    setReady(true);
-  }, []);
+  const handleClosePopup = () => {
+    setPopupOpen(false);
+  };
+
+  useLayoutEffect(() => setReady(true));
 
   return (
     <PageContainer title="Gantt Chart" description="This is Sample page">
       <DashboardCard title="Gantt Chart 2">
         <Box display="flex" flexDirection="column" height="100%">
           <Box flexGrow={1}>
-            {ready && (
-              <ReactGantt ds={dataSource} aiGenerate={displayButton} />
-            )}
+            {displayButton && <ReactGantt dataSource={overviewData} />}
+            {! displayButton && <ReactGantt dataSource={overviewAIData} />}
+            <LoadingPopup open={isPopupOpen} onClose={handleClosePopup} />
           </Box>
           <Box display="flex" justifyContent="flex-end" pt={1}>
             {ready && displayButton && (
