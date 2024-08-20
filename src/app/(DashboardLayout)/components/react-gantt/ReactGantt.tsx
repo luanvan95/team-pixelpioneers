@@ -24,8 +24,9 @@ import { overviewData } from "@/data/overviewData";
 import { editingResources } from "@/data/resourcesData";
 import { DropDownList } from "@syncfusion/ej2-react-dropdowns";
 import { registerLicense } from "@syncfusion/ej2-base";
+import EditDialog from "./EditDialog";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 registerLicense(
   "Ngo9BigBOggjHTQxAR8/V1NCaF1cWWhAYVJ+WmFZfVpgdVdMZF9bR3dPMyBoS35RckVrWHZecHBWRWJfUUZ0"
 );
@@ -103,7 +104,7 @@ const Overview = () => {
     },
     bottomTier: {
       unit: "Day",
-    //   count: 4,
+      //   count: 4,
       format: "dd",
     },
   };
@@ -367,7 +368,7 @@ const Overview = () => {
     };
   };
 
-  const Priority = (priority = 'Normal') => {
+  const Priority = (priority = "Normal") => {
     switch (priority) {
       case "Low":
         priorityStyle = CurrentTheme ? "#FFF6D1" : "#473F1E";
@@ -422,7 +423,7 @@ const Overview = () => {
     };
   };
 
-  const PriorityContent = (priority = 'Normal') => {
+  const PriorityContent = (priority = "Normal") => {
     switch (priority) {
       case "Low":
         priorityContentStyle = CurrentTheme ? "#70722B" : "#FDFF88";
@@ -487,6 +488,16 @@ const Overview = () => {
   const statusTemplate = statustemplate.bind(this);
   const priorityTemplate = prioritytemplate.bind(this);
 
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   const toolbarOptions = [
     // "ExpandAll",
     // "CollapseAll",
@@ -512,11 +523,12 @@ const Overview = () => {
     showDeleteConfirmDialog: false,
   };
 
-  const rowSelected = ({data} = props): void => {
+  const rowSelected = ({ data } = props): void => {
     console.log(data);
+    handleClickOpen();
   };
 
-  const taskbarEditing = ({data} = props): void => {
+  const taskbarEditing = ({ data } = props): void => {
     console.log(data);
   };
 
@@ -559,7 +571,7 @@ const Overview = () => {
             ></ColumnDirective>
             <ColumnDirective
               field="TaskName"
-              headerText="Product Release"
+              headerText="Title"
               width="250"
             ></ColumnDirective>
             <ColumnDirective
@@ -623,6 +635,7 @@ const Overview = () => {
           />
         </GanttComponent>
       </div>
+      <EditDialog open={open} onClose={handleClose} />
     </div>
   );
 };

@@ -1,9 +1,8 @@
 "use client";
-import { styled, Container, Box } from "@mui/material";
+import { useMediaQuery, styled, Container, Box } from "@mui/material";
 import React, { useState } from "react";
 import Header from "@/app/(DashboardLayout)/layout/header/Header";
 import Sidebar from "@/app/(DashboardLayout)/layout/sidebar/Sidebar";
-
 
 const MainWrapper = styled("div")(() => ({
   display: "flex",
@@ -24,40 +23,49 @@ interface Props {
   children: React.ReactNode;
 }
 
-
-
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
-  const [isMobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+  const [isMobileSidebarOpen, setMobileSidebarOpen] = useState(true);
+  const lgUp = useMediaQuery((theme: any) => theme.breakpoints.up("lg"));
+
   return (
     <MainWrapper className="mainwrapper">
       {/* ------------------------------------------- */}
       {/* Sidebar */}
       {/* ------------------------------------------- */}
       <Sidebar
-        isSidebarOpen={isSidebarOpen}
+        isSidebarOpen={isMobileSidebarOpen}
         isMobileSidebarOpen={isMobileSidebarOpen}
-        onSidebarClose={() => setMobileSidebarOpen(false)}
+        onSidebarClose={() => setMobileSidebarOpen(!isMobileSidebarOpen)}
       />
       {/* ------------------------------------------- */}
       {/* Main Wrapper */}
       {/* ------------------------------------------- */}
-      <PageWrapper className="page-wrapper" sx={{overflow: "scroll"}}>
+      <PageWrapper className="page-wrapper" sx={{ overflow: "scroll" }}>
         {/* ------------------------------------------- */}
         {/* Header */}
         {/* ------------------------------------------- */}
-        <Header toggleMobileSidebar={() => setMobileSidebarOpen(true)} />
+        <Header
+          isMobileSidebarOpen={isMobileSidebarOpen}
+          toggleMobileSidebar={() => setMobileSidebarOpen(!isMobileSidebarOpen)}
+        />
         {/* ------------------------------------------- */}
         {/* PageContent */}
         {/* ------------------------------------------- */}
         <Container
           sx={{
             paddingTop: "20px",
-            minWidth: "calc(100vw - 300px)",
+            marginLeft: lgUp && isMobileSidebarOpen ? "300px" : "0",
+            minWidth:
+              lgUp && isMobileSidebarOpen ? "calc(100vw - 300px)" : "100vw",
+            width:
+              lgUp && isMobileSidebarOpen ? "calc(100vw - 300px)" : "100vw",
+            // maxWidth: "100vw",
+            // minWidth: "calc(100vw - 300px)",
           }}
         >
           {/* ------------------------------------------- */}
