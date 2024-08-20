@@ -30,67 +30,68 @@ const MSidebar = ({
   };
 
 
-  if (lgUp) {
-    return (
-      <Box
-        sx={{
-          width: sidebarWidth,
-          flexShrink: 0,
-        }}
-      >
-        {/* ------------------------------------------- */}
-        {/* Sidebar for desktop */}
-        {/* ------------------------------------------- */}
-        <Drawer
-          anchor="left"
-          open={isSidebarOpen}
-          variant="permanent"
-          PaperProps={{
-            sx: {
-              boxSizing: "border-box",
-              ...scrollbarStyles,
-            },
-          }}
-        >
-          {/* ------------------------------------------- */}
-          {/* Sidebar Box */}
-          {/* ------------------------------------------- */}
-          <Box
-            sx={{
-              height: "100%",
-            }}
-          >
-            <Sidebar
-              width={'270px'}
-              collapsewidth="80px"
-              open={isSidebarOpen}
-              themeColor="#5d87ff"
-              themeSecondaryColor="#49beff"
-              showProfile={false}
-            >
-              {/* ------------------------------------------- */}
-              {/* Logo */}
-              {/* ------------------------------------------- */}
-              <Logo img="/images/logos/dark-logo.svg" />
-              <Box>
-                {/* ------------------------------------------- */}
-                {/* Sidebar Items */}
-                {/* ------------------------------------------- */}
-                <SidebarItems />
-              </Box>
-            </Sidebar >
-          </Box>
-        </Drawer>
-      </Box>
-    );
-  }
+  // if (lgUp) {
+  //   return (
+  //     <Box
+  //       sx={{
+  //         width: sidebarWidth,
+  //         flexShrink: 0,
+  //       }}
+  //     >
+  //       {/* ------------------------------------------- */}
+  //       {/* Sidebar for desktop */}
+  //       {/* ------------------------------------------- */}
+  //       <Drawer
+  //         anchor="left"
+  //         open={isMobileSidebarOpen}
+  //         variant="permanent"
+  //         PaperProps={{
+  //           sx: {
+  //             boxSizing: "border-box",
+  //             ...scrollbarStyles,
+  //           },
+  //         }}
+  //       >
+  //         {/* ------------------------------------------- */}
+  //         {/* Sidebar Box */}
+  //         {/* ------------------------------------------- */}
+  //         <Box
+  //           sx={{
+  //             height: "100%",
+  //           }}
+  //         >
+  //           <Sidebar
+  //             width={'270px'}
+  //             collapsewidth="80px"
+  //             open={isMobileSidebarOpen}
+  //             themeColor="#5d87ff"
+  //             themeSecondaryColor="#49beff"
+  //             showProfile={false}
+  //           >
+  //             {/* ------------------------------------------- */}
+  //             {/* Logo */}
+  //             {/* ------------------------------------------- */}
+  //             <Logo img="/images/logos/dark-logo.svg" />
+  //             <Box>
+  //               {/* ------------------------------------------- */}
+  //               {/* Sidebar Items */}
+  //               {/* ------------------------------------------- */}
+  //               <SidebarItems />
+  //             </Box>
+  //           </Sidebar >
+  //         </Box>
+  //       </Drawer>
+  //     </Box>
+  //   );
+  // }
 
   return (
     <Drawer
       anchor="left"
       open={isMobileSidebarOpen}
       onClose={onSidebarClose}
-      variant="temporary"
+      // variant={lgUp ? "permanent" : "temporary"}
+      variant={isMobileSidebarOpen && lgUp ? "permanent" : "temporary"}
       PaperProps={{
         sx: {
           boxShadow: (theme) => theme.shadows[8],
