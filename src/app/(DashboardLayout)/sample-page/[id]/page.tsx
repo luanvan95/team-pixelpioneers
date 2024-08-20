@@ -54,6 +54,7 @@ const SamplePage2 = ({ params }) => {
       // call API to generate data
       try {
         const [result1, result2, result3] = await Promise.all([
+        // const [result1, result2, result3] = await Promise.all([
           generateSlogan({ campaign_id: params.id }),
           generateHashTag({ campaign_id: params.id }),
           generateImages({

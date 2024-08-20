@@ -552,6 +552,7 @@ const Overview = ({ campaignName, dataSource } = props) => {
   const [dialogData, setDialogData] = useState(null);
 
   const handleClickOpen = (data) => () => {
+    console.log(data);
     setDialogData(data);
     setOpen(true);
   };
