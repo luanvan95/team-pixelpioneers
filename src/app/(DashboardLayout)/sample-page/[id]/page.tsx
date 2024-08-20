@@ -7,48 +7,109 @@ import PsychologyIcon from "@mui/icons-material/Psychology";
 import { overviewData, overviewAIData } from "@/data/overviewData";
 import { useEffect, useLayoutEffect, useState } from "react";
 import LoadingPopup from "@/app/(DashboardLayout)/components/shared/LoadingPopup";
+import {
+  generateCaptions,
+  generateHashTag,
+  generateSlogan,
+  generateImages,
+} from "@/utils/lib/api";
+import { useRouter } from "next/navigation";
 
-const SamplePage2 = () => {
-  const [ready, setReady] = useState(false);
+const SamplePage2 = ({ params }) => {
   const [displayButton, setDisplayButton] = useState(true);
   const [isPopupOpen, setPopupOpen] = useState(false);
+  const [campaign, setCampaign]: any = useState();
+  const [dataSource, setDataSource]: any = useState();
 
-  const handleClick = () => {
-    const confirmed = window.confirm(
-      "Are you sure you want to perform this action?"
-    );
+  const fetchCampaign = async (id) => {
+    try {
+      const response = await fetch(
+        "https://www.123rf.com/apicore-texttoimage/campaign/retrieve",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ campaign_id: params.id }),
+        }
+      );
 
-    // If the user clicks "OK", proceed with setting the data
-    if (confirmed) {
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const { data } = await response.json();
+      setCampaign(data);
+
+      return data;
+    } catch (error) {
+      console.error("Error:", error);
+      throw error;
+    }
+  };
+
+  const handleActionButtonClick = async (props) => {
+    if (props) {
       setPopupOpen(true);
-      setDisplayButton(false);
+      // call API to generate data
+      try {
+        const [result1, result2, result3] = await Promise.all([
+          generateSlogan({ campaign_id: params.id }),
+          generateHashTag({ campaign_id: params.id }),
+          generateImages({
+            campaign_id: params.id,
+            design:
+              "Modern minimalistic with warm tones, palm leaves, opened coconuts and lavander surrounding the bar of soap",
+          }),
+          // generateCaptions({ campaign_id: params.id }),
+        ]);
+
+        console.log("Result from endpoint1:", result1);
+        console.log("Result from endpoint1:", result2);
+        console.log("Result from endpoint1:", result3);
+        // console.log("Result from endpoint1:", result4);
+        handleClosePopup();
+      } catch (error) {
+        console.error("Error during POST requests:", error);
+      }
     }
   };
 
   const handleClosePopup = () => {
     setPopupOpen(false);
+    setDisplayButton(false);
   };
 
-  useLayoutEffect(() => setReady(true));
+  useEffect(() => {
+    if (params.id) {
+      fetchCampaign(params.id);
+    }
+  }, [params.id]);
 
   return (
     <PageContainer title="Gantt Chart" description="This is Sample page">
-      <DashboardCard title="Gantt Chart 2">
-        <Box display="flex" flexDirection="column" height="100%">
-          <Box flexGrow={1}>
-            {displayButton && <ReactGantt dataSource={overviewData} />}
-            {! displayButton && <ReactGantt dataSource={overviewAIData} />}
+      <DashboardCard
+        title="Gantt Chart"
+        displayButton={displayButton}
+        onActionButtonClick={handleActionButtonClick}
+      >
+        {campaign && (
+          <Box display="flex" flexDirection="column" height="100%">
+            {(displayButton || isPopupOpen) && (
+              <ReactGantt
+                campaignName={campaign.campaign_name}
+                dataSource={overviewData}
+              />
+            )}
+            {!displayButton && !isPopupOpen && (
+              <ReactGantt
+                campaignName={campaign.campaign_name}
+                dataSource={overviewAIData}
+              />
+            )}
             <LoadingPopup open={isPopupOpen} onClose={handleClosePopup} />
           </Box>
-          <Box display="flex" justifyContent="flex-end" pt={1}>
-            {ready && displayButton && (
-              <Button variant="contained" onClick={handleClick}>
-                Generate with AI
-                <PsychologyIcon style={{ marginLeft: "5px" }} />
-              </Button>
-            )}
-          </Box>
-        </Box>
+        )}
       </DashboardCard>
     </PageContainer>
   );

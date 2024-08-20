@@ -39,7 +39,7 @@ function addMonths(date, months) {
   return newDate;
 }
 
-const Overview = ({ dataSource } = props) => {
+const Overview = ({ campaignName, dataSource } = props) => {
   let CurrentTheme = true;
   let statusStyleColor;
   let priorityStyle;
@@ -158,10 +158,12 @@ const Overview = ({ dataSource } = props) => {
   };
 
   const projectTemplate = (props) => {
-    const { AIGenerator } = props.taskData;
+    const { index, level, taskData } = props;
+    const { AIGenerator } = taskData;
+    
     return (
       <div style={{ display: "inline-flex", alignItems: "center" }}>
-        {props.TaskName}
+        { (index == 0 && level == 0) ? campaignName : props.TaskName}
         {AIGenerator && (
           <IconButton onClick={handleClickOpen(props.taskData)}>
             <PsychologyIcon />
@@ -540,8 +542,7 @@ const Overview = ({ dataSource } = props) => {
     };
   };
 
-  const load = () => {
-  };
+  const load = () => {};
 
   const template = columnTemplate.bind(this);
   const statusTemplate = statustemplate.bind(this);
@@ -589,78 +590,78 @@ const Overview = ({ dataSource } = props) => {
     <div className="control-pane">
       <div className="control-section">
         <GanttComponent
-        id="Overview"
-        dataSource={dataSource}
-        treeColumnIndex={1}
-        allowSelection={true}
-        editSettings={editSettings}
-        highlightWeekends={true}
-        projectStartDate={projectStartDate}
-        projectEndDate={projectEndDate}
-        load={load.bind(this)}
-        taskFields={taskFields}
-        timelineSettings={timelineSettings}
-        labelSettings={labelSettings}
-        splitterSettings={splitterSettings}
-        //   height="100%"
-        gridLines={gridLines}
-        allowFiltering={false}
-        showColumnMenu={true}
-        allowSorting={false}
-        allowResizing={true}
-        toolbar={toolbarOptions}
-        resourceFields={resourceFields}
-        resources={editingResources}
-        allowRowDragAndDrop={false}
+          id="Overview"
+          dataSource={dataSource}
+          treeColumnIndex={1}
+          allowSelection={true}
+          editSettings={editSettings}
+          highlightWeekends={true}
+          projectStartDate={projectStartDate}
+          projectEndDate={projectEndDate}
+          load={load.bind(this)}
+          taskFields={taskFields}
+          timelineSettings={timelineSettings}
+          labelSettings={labelSettings}
+          splitterSettings={splitterSettings}
+          //   height="100%"
+          gridLines={gridLines}
+          allowFiltering={false}
+          showColumnMenu={true}
+          allowSorting={false}
+          allowResizing={true}
+          toolbar={toolbarOptions}
+          resourceFields={resourceFields}
+          resources={editingResources}
+          allowRowDragAndDrop={false}
         >
-        <ColumnsDirective>
+          <ColumnsDirective>
             <ColumnDirective
-            field="TaskId"
-            headerText="Task Id"
-            width="180"
-            visible={false}
+              field="TaskId"
+              headerText="Task Id"
+              width="180"
+              visible={false}
             ></ColumnDirective>
             <ColumnDirective
-            field="TaskName"
-            headerText="Projects"
-            width="250"
-            template={projectTemplate}
+              field="TaskName"
+              headerText="Projects"
+              width="250"
+              template={projectTemplate}
             ></ColumnDirective>
             <ColumnDirective
-            field="resources"
-            headerText="Assignee"
-            allowSorting={false}
-            width="140"
-            template={template}
+              field="resources"
+              headerText="Assignee"
+              allowSorting={false}
+              width="140"
+              template={template}
             ></ColumnDirective>
             <ColumnDirective
-            field="Status"
-            headerText="Status"
-            minWidth="100"
-            width="120"
-            template={statusTemplate}
+              field="Status"
+              headerText="Status"
+              minWidth="100"
+              width="120"
+              template={statusTemplate}
             ></ColumnDirective>
             <ColumnDirective
-            field="Priority"
-            headerText="Priority"
-            minWidth="80"
-            width="100"
-            template={priorityTemplate}
+              field="Priority"
+              headerText="Priority"
+              minWidth="80"
+              width="100"
+              template={priorityTemplate}
             ></ColumnDirective>
 
             <ColumnDirective
-            field="TimeLog"
-            headerText="Work Log"
-            width="120"
+              field="TimeLog"
+              headerText="Work Log"
+              width="120"
             ></ColumnDirective>
-        </ColumnsDirective>
-        {/* <EventMarkersDirective>
+          </ColumnsDirective>
+          {/* <EventMarkersDirective>
         <EventMarkerDirective
             day={eventMarkerDay1}
             label="Q-1 Release"
         ></EventMarkerDirective>
         </EventMarkersDirective> */}
-        {/* <HolidaysDirective>
+          {/* <HolidaysDirective>
         <HolidayDirective
             from="01/01/2024"
             to="01/01/2024"
@@ -672,19 +673,19 @@ const Overview = ({ dataSource } = props) => {
             label="Christmas Holidays"
         ></HolidayDirective>
         </HolidaysDirective> */}
-        <Inject
+          <Inject
             services={[
-            Edit,
-            Selection,
-            Toolbar,
-            DayMarkers,
-            ColumnMenu,
-            Filter,
-            Sort,
-            Resize,
-            RowDD,
+              Edit,
+              Selection,
+              Toolbar,
+              DayMarkers,
+              ColumnMenu,
+              Filter,
+              Sort,
+              Resize,
+              RowDD,
             ]}
-        />
+          />
         </GanttComponent>
       </div>
       <EditDialog open={open} onClose={handleClose} data={dialogData} />
