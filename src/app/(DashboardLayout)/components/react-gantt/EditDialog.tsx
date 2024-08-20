@@ -42,7 +42,6 @@ function TabPanel(props: TabPanelProps) {
 }
 
 const FullScreenDialog: React.FC<FullScreenDialogProps> = ({ open, onClose, data }) => {
-  console.log(data, 'dialog');
   const [tabValue, setTabValue] = useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {

@@ -20,13 +20,12 @@ import {
   EditDialogFieldDirective,
   EditDialogFieldsDirective,
 } from "@syncfusion/ej2-react-gantt";
-import { overviewData } from "@/data/overviewData";
 import { editingResources } from "@/data/resourcesData";
 import { DropDownList } from "@syncfusion/ej2-react-dropdowns";
 import { registerLicense } from "@syncfusion/ej2-base";
 import EditDialog from "./EditDialog";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { IconButton } from "@mui/material";
 import PsychologyIcon from "@mui/icons-material/Psychology";
 
@@ -34,7 +33,20 @@ registerLicense(
   "Ngo9BigBOggjHTQxAR8/V1NCaF1cWWhAYVJ+WmFZfVpgdVdMZF9bR3dPMyBoS35RckVrWHZecHBWRWJfUUZ0"
 );
 
-const Overview = () => {
+function addMonths(date, months) {
+  let newDate = new Date(date);
+  newDate.setMonth(newDate.getMonth() + months);
+  return newDate;
+}
+
+const Overview = ({ ds, aiGenerate } = props) => {
+  const [dataSource, setDataSource] = useState(ds);
+  useEffect(()=> {
+    setDataSource(ds);
+    console.log(ds);
+  }, [ds])
+ 
+
   let CurrentTheme = true;
   let statusStyleColor;
   let priorityStyle;
@@ -91,8 +103,12 @@ const Overview = () => {
     position: "57%",
   };
 
-  const projectStartDate = new Date("03/01/2021");
-  const projectEndDate = new Date("06/10/2021");
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const [nextMonthDate, setNextMonthDate] = useState(addMonths(new Date(), 1));
+
+  const projectStartDate = currentDate;
+  const projectEndDate = nextMonthDate;
+
   const gridLines = "Both";
 
   const change = (args) => {
@@ -531,7 +547,8 @@ const Overview = () => {
     };
   };
 
-  const load = () => {};
+  const load = () => {
+  };
 
   const template = columnTemplate.bind(this);
   const statusTemplate = statustemplate.bind(this);
@@ -578,79 +595,80 @@ const Overview = () => {
   return (
     <div className="control-pane">
       <div className="control-section">
-        <GanttComponent
-          id="Overview"
-          dataSource={overviewData}
-          treeColumnIndex={1}
-          allowSelection={true}
-          editSettings={editSettings}
-          highlightWeekends={true}
-          projectStartDate={projectStartDate}
-          projectEndDate={projectEndDate}
-          load={load.bind(this)}
-          taskFields={taskFields}
-          timelineSettings={timelineSettings}
-          labelSettings={labelSettings}
-          splitterSettings={splitterSettings}
-          //   height="100%"
-          gridLines={gridLines}
-          allowFiltering={false}
-          showColumnMenu={true}
-          allowSorting={false}
-          allowResizing={true}
-          toolbar={toolbarOptions}
-          resourceFields={resourceFields}
-          resources={editingResources}
-          allowRowDragAndDrop={false}
-        >
-          <ColumnsDirective>
-            <ColumnDirective
-              field="TaskId"
-              headerText="Task Id"
-              width="180"
-              visible={false}
-            ></ColumnDirective>
-            <ColumnDirective
-              field="TaskName"
-              headerText="Projects"
-              width="250"
-              template={projectTemplate}
-            ></ColumnDirective>
-            <ColumnDirective
-              field="resources"
-              headerText="Assignee"
-              allowSorting={false}
-              width="140"
-              template={template}
-            ></ColumnDirective>
-            <ColumnDirective
-              field="Status"
-              headerText="Status"
-              minWidth="100"
-              width="120"
-              template={statusTemplate}
-            ></ColumnDirective>
-            <ColumnDirective
-              field="Priority"
-              headerText="Priority"
-              minWidth="80"
-              width="100"
-              template={priorityTemplate}
-            ></ColumnDirective>
+        {ds && (
+          <GanttComponent
+            id="Overview"
+            dataSource={dataSource}
+            treeColumnIndex={1}
+            allowSelection={true}
+            editSettings={editSettings}
+            highlightWeekends={true}
+            projectStartDate={projectStartDate}
+            projectEndDate={projectEndDate}
+            load={load.bind(this)}
+            taskFields={taskFields}
+            timelineSettings={timelineSettings}
+            labelSettings={labelSettings}
+            splitterSettings={splitterSettings}
+            //   height="100%"
+            gridLines={gridLines}
+            allowFiltering={false}
+            showColumnMenu={true}
+            allowSorting={false}
+            allowResizing={true}
+            toolbar={toolbarOptions}
+            resourceFields={resourceFields}
+            resources={editingResources}
+            allowRowDragAndDrop={false}
+          >
+            <ColumnsDirective>
+              <ColumnDirective
+                field="TaskId"
+                headerText="Task Id"
+                width="180"
+                visible={false}
+              ></ColumnDirective>
+              <ColumnDirective
+                field="TaskName"
+                headerText="Projects"
+                width="250"
+                template={projectTemplate}
+              ></ColumnDirective>
+              <ColumnDirective
+                field="resources"
+                headerText="Assignee"
+                allowSorting={false}
+                width="140"
+                template={template}
+              ></ColumnDirective>
+              <ColumnDirective
+                field="Status"
+                headerText="Status"
+                minWidth="100"
+                width="120"
+                template={statusTemplate}
+              ></ColumnDirective>
+              <ColumnDirective
+                field="Priority"
+                headerText="Priority"
+                minWidth="80"
+                width="100"
+                template={priorityTemplate}
+              ></ColumnDirective>
 
-            <ColumnDirective
-              field="TimeLog"
-              headerText="Work Log"
-              width="120"
-            ></ColumnDirective>
-          </ColumnsDirective>
-          {/* <EventMarkersDirective>
+              <ColumnDirective
+                field="TimeLog"
+                headerText="Work Log"
+                width="120"
+              ></ColumnDirective>
+            </ColumnsDirective>
+            {/* <EventMarkersDirective>
             <EventMarkerDirective
               day={eventMarkerDay1}
               label="Q-1 Release"
             ></EventMarkerDirective>
           </EventMarkersDirective> */}
-          {/* <HolidaysDirective>
+            {/* <HolidaysDirective>
             <HolidayDirective
               from="01/01/2024"
               to="01/01/2024"
@@ -662,20 +680,21 @@ const Overview = () => {
               label="Christmas Holidays"
             ></HolidayDirective>
           </HolidaysDirective> */}
-          <Inject
-            services={[
-              Edit,
-              Selection,
-              Toolbar,
-              DayMarkers,
-              ColumnMenu,
-              Filter,
-              Sort,
-              Resize,
-              RowDD,
-            ]}
-          />
-        </GanttComponent>
+            <Inject
+              services={[
+                Edit,
+                Selection,
+                Toolbar,
+                DayMarkers,
+                ColumnMenu,
+                Filter,
+                Sort,
+                Resize,
+                RowDD,
+              ]}
+            />
+          </GanttComponent>
+        )}
       </div>
       <EditDialog open={open} onClose={handleClose} data={dialogData} />
     </div>
