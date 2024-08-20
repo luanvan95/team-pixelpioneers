@@ -16,9 +16,37 @@ import {
 import { useRouter } from "next/navigation";
 
 const SamplePage2 = ({ params }) => {
-  const router = useRouter();
   const [displayButton, setDisplayButton] = useState(true);
   const [isPopupOpen, setPopupOpen] = useState(false);
+  const [campaign, setCampaign]: any = useState();
+  const [dataSource, setDataSource]: any = useState();
+
+  const fetchCampaign = async (id) => {
+    try {
+      const response = await fetch(
+        "https://www.123rf.com/apicore-texttoimage/campaign/retrieve",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ campaign_id: params.id }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const { data } = await response.json();
+      setCampaign(data);
+
+      return data;
+    } catch (error) {
+      console.error("Error:", error);
+      throw error;
+    }
+  };
 
   const handleActionButtonClick = async (props) => {
     if (props) {
@@ -31,11 +59,11 @@ const SamplePage2 = ({ params }) => {
           generateImages({
             campaign_id: params.id,
             design:
-            "Modern minimalistic with warm tones, palm leaves, opened coconuts and lavander surrounding the bar of soap",
+              "Modern minimalistic with warm tones, palm leaves, opened coconuts and lavander surrounding the bar of soap",
           }),
           // generateCaptions({ campaign_id: params.id }),
         ]);
-      
+
         console.log("Result from endpoint1:", result1);
         console.log("Result from endpoint1:", result2);
         console.log("Result from endpoint1:", result3);
@@ -52,6 +80,12 @@ const SamplePage2 = ({ params }) => {
     setDisplayButton(false);
   };
 
+  useEffect(() => {
+    if (params.id) {
+      fetchCampaign(params.id);
+    }
+  }, [params.id]);
+
   return (
     <PageContainer title="Gantt Chart" description="This is Sample page">
       <DashboardCard
@@ -59,15 +93,23 @@ const SamplePage2 = ({ params }) => {
         displayButton={displayButton}
         onActionButtonClick={handleActionButtonClick}
       >
-        <Box display="flex" flexDirection="column" height="100%">
-          {(displayButton || isPopupOpen) && (
-            <ReactGantt dataSource={overviewData} />
-          )}
-          {!displayButton && !isPopupOpen && (
-            <ReactGantt dataSource={overviewAIData} />
-          )}
-          <LoadingPopup open={isPopupOpen} onClose={handleClosePopup} />
-        </Box>
+        {campaign && (
+          <Box display="flex" flexDirection="column" height="100%">
+            {(displayButton || isPopupOpen) && (
+              <ReactGantt
+                campaignName={campaign.campaign_name}
+                dataSource={overviewData}
+              />
+            )}
+            {!displayButton && !isPopupOpen && (
+              <ReactGantt
+                campaignName={campaign.campaign_name}
+                dataSource={overviewAIData}
+              />
+            )}
+            <LoadingPopup open={isPopupOpen} onClose={handleClosePopup} />
+          </Box>
+        )}
       </DashboardCard>
     </PageContainer>
   );

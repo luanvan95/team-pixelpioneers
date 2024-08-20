@@ -1,4 +1,4 @@
-export const overviewData = [
+export let overviewData = [
   {
     TaskId: 1,
     TaskName: "Campaign A",
@@ -113,7 +113,7 @@ export const overviewData = [
   },
 ];
 
-export const overviewAIData = [
+export let overviewAIData = [
   {
     TaskId: 1,
     TaskName: "Campaign B",
