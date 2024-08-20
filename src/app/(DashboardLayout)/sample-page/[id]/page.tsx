@@ -7,47 +7,49 @@ import PsychologyIcon from "@mui/icons-material/Psychology";
 import { overviewData, overviewAIData } from "@/data/overviewData";
 import { useEffect, useLayoutEffect, useState } from "react";
 import LoadingPopup from "@/app/(DashboardLayout)/components/shared/LoadingPopup";
+import { postRequest1, postRequest2, postRequest3 } from '@/lib/api';
+
 
 const SamplePage2 = () => {
-  const [ready, setReady] = useState(false);
   const [displayButton, setDisplayButton] = useState(true);
   const [isPopupOpen, setPopupOpen] = useState(false);
 
-  const handleClick = () => {
-    const confirmed = window.confirm(
-      "Are you sure you want to perform this action?"
-    );
-
-    // If the user clicks "OK", proceed with setting the data
-    if (confirmed) {
+  const handleActionButtonClick = async (props) => {
+    if (props) {
       setPopupOpen(true);
-      setDisplayButton(false);
+      // call API to generate data
+      try {
+        // const [result1, result2, result3] = await Promise.all([
+        //   postRequest1(data1),
+        //   postRequest2(data2),
+        //   postRequest3(data3),
+        // ]);
+  
+        // console.log('Result from endpoint1:', result1);
+        // console.log('Result from endpoint2:', result2);
+        // console.log('Result from endpoint3:', result3);
+      } catch (error) {
+        console.error('Error during POST requests:', error);
+      }
     }
   };
 
   const handleClosePopup = () => {
     setPopupOpen(false);
+    setDisplayButton(false);
   };
-
-  useLayoutEffect(() => setReady(true));
 
   return (
     <PageContainer title="Gantt Chart" description="This is Sample page">
-      <DashboardCard title="Gantt Chart 2">
+      <DashboardCard
+        title="Gantt Chart"
+        displayButton={displayButton}
+        onActionButtonClick={handleActionButtonClick}
+      >
         <Box display="flex" flexDirection="column" height="100%">
-          <Box flexGrow={1}>
-            {displayButton && <ReactGantt dataSource={overviewData} />}
-            {! displayButton && <ReactGantt dataSource={overviewAIData} />}
-            <LoadingPopup open={isPopupOpen} onClose={handleClosePopup} />
-          </Box>
-          <Box display="flex" justifyContent="flex-end" pt={1}>
-            {ready && displayButton && (
-              <Button variant="contained" onClick={handleClick}>
-                Generate with AI
-                <PsychologyIcon style={{ marginLeft: "5px" }} />
-              </Button>
-            )}
-          </Box>
+          {(displayButton || isPopupOpen) && <ReactGantt dataSource={overviewData} />}
+          {!displayButton && !isPopupOpen && <ReactGantt dataSource={overviewAIData} />}
+          <LoadingPopup open={isPopupOpen} onClose={handleClosePopup} />
         </Box>
       </DashboardCard>
     </PageContainer>
