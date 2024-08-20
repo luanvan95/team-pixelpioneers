@@ -46,7 +46,7 @@ export default function RootLayout({
       {/* ------------------------------------------- */}
       {/* Main Wrapper */}
       {/* ------------------------------------------- */}
-      <PageWrapper className="page-wrapper">
+      <PageWrapper className="page-wrapper" sx={{overflow: "scroll"}}>
         {/* ------------------------------------------- */}
         {/* Header */}
         {/* ------------------------------------------- */}
@@ -57,7 +57,7 @@ export default function RootLayout({
         <Container
           sx={{
             paddingTop: "20px",
-            maxWidth: "1200px",
+            minWidth: "calc(100vw - 300px)",
           }}
         >
           {/* ------------------------------------------- */}

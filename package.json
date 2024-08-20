@@ -16,6 +16,8 @@
     "@mui/icons-material": "5.15.15",
     "@mui/lab": "5.0.0-alpha.170",
     "@mui/material": "5.15.15",
+    "@syncfusion/ej2-react-dropdowns": "^26.2.9",
+    "@syncfusion/ej2-react-gantt": "^26.2.9",
     "@tabler/icons-react": "2.30.0",
     "@types/node": "20.4.5",
     "@types/react": "18.2.18",

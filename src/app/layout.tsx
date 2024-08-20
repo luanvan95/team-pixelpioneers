@@ -10,6 +10,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <link
+          href="https://cdn.syncfusion.com/ej2/26.2.4/bootstrap5.css"
+          rel="stylesheet"
+        />
+      </head>
       <body>
         <ThemeProvider theme={baselightTheme}>
           {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
