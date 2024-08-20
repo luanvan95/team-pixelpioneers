@@ -27,6 +27,9 @@ import { registerLicense } from "@syncfusion/ej2-base";
 import EditDialog from "./EditDialog";
 
 import { useEffect, useState } from "react";
+import { IconButton } from "@mui/material";
+import PsychologyIcon from "@mui/icons-material/Psychology";
+
 registerLicense(
   "Ngo9BigBOggjHTQxAR8/V1NCaF1cWWhAYVJ+WmFZfVpgdVdMZF9bR3dPMyBoS35RckVrWHZecHBWRWJfUUZ0"
 );
@@ -61,15 +64,22 @@ const Overview = () => {
   ];
 
   const taskFields = {
+    // id: "TaskId",
+    // name: "TaskName",
+    // startDate: "StartDate",
+    // endDate: "EndDate",
+    // duration: "TimeLog",
+    // progress: "Progress",
+    // dependency: "Predecessor",
+    // parentID: "ParentId",
     id: "TaskId",
     name: "TaskName",
     startDate: "StartDate",
-    endDate: "EndDate",
-    duration: "TimeLog",
-    progress: "Progress",
+    duration: "Duration",
     dependency: "Predecessor",
-    parentID: "ParentId",
+    progress: "Progress",
     resourceInfo: "Assignee",
+    child: "SubTasks",
   };
 
   const resourceFields = {
@@ -81,9 +91,9 @@ const Overview = () => {
     position: "57%",
   };
 
-  const projectStartDate = new Date("12/17/2023");
-  const projectEndDate = new Date("10/26/2024");
-  const gridLines = "Vertical";
+  const projectStartDate = new Date("03/01/2021");
+  const projectEndDate = new Date("06/10/2021");
+  const gridLines = "Both";
 
   const change = (args) => {
     let gantt = document.getElementsByClassName("e-gantt")[0].ej2_instances[0];
@@ -95,6 +105,30 @@ const Overview = () => {
       gantt.setSplitterPosition("57%", "position");
     }
   };
+
+  //   const timelineSettings: any = {
+  //     timelineUnitSize: 50,
+  //     topTier: {
+  //       unit: 'Month',
+  //       format: 'MMM dd, y',
+  //     },
+  //     bottomTier: {
+  //       unit: 'Day',
+  //       formatter: (date: Date) => {
+  //         let month: number = date.getMonth();
+  //         if (month === 1) {
+  //           return '';
+  //         } else {
+  //           let presentDate: Date = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  //           let start: Date = new Date(presentDate.getFullYear(), 0, 0);
+  //           let diff: number = Number(presentDate) - Number(start);
+  //           let oneDay: number = 1000 * 60 * 60 * 24;
+  //           let day: number = Math.floor(diff / oneDay);
+  //           return 'day ' + (day - 59);
+  //         }
+  //       },
+  //     },
+  //   };
 
   const timelineSettings = {
     showTooltip: true,
@@ -114,7 +148,19 @@ const Overview = () => {
     rightLabel: "Assignee",
   };
 
-  const eventMarkerDay1 = new Date("04/04/2024");
+  const projectTemplate = (props) => {
+    const { AIGenerator } = props.taskData;
+    return (
+      <div style={{ display: "inline-flex", alignItems: "center" }}>
+        {props.TaskName}
+        {AIGenerator && (
+          <IconButton onClick={handleClickOpen(props.taskData)}>
+            <PsychologyIcon />
+          </IconButton>
+        )}
+      </div>
+    );
+  };
 
   const statustemplate = (props) => {
     let sts = Status(props.taskData.Status);
@@ -191,17 +237,20 @@ const Overview = () => {
   };
 
   const columnTemplate = (props) => {
-    var src =
-      "https://ej2.syncfusion.com/react/demos/https://ej2.syncfusion.com/react/demos/src/gantt/images/" +
-      props.ganttProperties.resourceNames +
-      ".png";
+    const { taskData } = props || {};
+    // console.log(props.ganttProperties);
+
+    // var src =
+    //   "https://ej2.syncfusion.com/react/demos/https://ej2.syncfusion.com/react/demos/src/gantt/images/" +
+    //   props.ganttProperties.resourceNames +
+    //   ".png";
     if (props.ganttProperties.resourceNames) {
       let gantt =
         document.getElementsByClassName("e-gantt")[0].ej2_instances[0];
       if (gantt.enableRtl) {
         return (
           <div className="columnTemplate">
-            <img src={src} height="25px" width="25px" />
+            {/* <img src={src} height="25px" width="25px" /> */}
             <div
               style={{
                 display: "inline-block",
@@ -218,7 +267,7 @@ const Overview = () => {
       } else {
         return (
           <div className="columnTemplate">
-            <img src={src} height="25px" width="25px" />
+            {/* <img src={src} height="25px" width="25px" /> */}
             <div
               style={{
                 display: "inline-block",
@@ -489,12 +538,15 @@ const Overview = () => {
   const priorityTemplate = prioritytemplate.bind(this);
 
   const [open, setOpen] = useState(false);
+  const [dialogData, setDialogData] = useState(null);
 
-  const handleClickOpen = () => {
+  const handleClickOpen = (data) => () => {
+    setDialogData(data);
     setOpen(true);
   };
 
   const handleClose = () => {
+    setDialogData(null);
     setOpen(false);
   };
 
@@ -523,15 +575,6 @@ const Overview = () => {
     showDeleteConfirmDialog: false,
   };
 
-  const rowSelected = ({ data } = props): void => {
-    console.log(data);
-    handleClickOpen();
-  };
-
-  const taskbarEditing = ({ data } = props): void => {
-    console.log(data);
-  };
-
   return (
     <div className="control-pane">
       <div className="control-section">
@@ -549,18 +592,16 @@ const Overview = () => {
           timelineSettings={timelineSettings}
           labelSettings={labelSettings}
           splitterSettings={splitterSettings}
-          height="500px"
+          //   height="100%"
           gridLines={gridLines}
           allowFiltering={false}
           showColumnMenu={true}
           allowSorting={false}
-          allowResizing={false}
+          allowResizing={true}
           toolbar={toolbarOptions}
           resourceFields={resourceFields}
           resources={editingResources}
           allowRowDragAndDrop={false}
-          rowSelected={rowSelected.bind(this)}
-          taskbarEditing={taskbarEditing.bind(this)}
         >
           <ColumnsDirective>
             <ColumnDirective
@@ -571,8 +612,9 @@ const Overview = () => {
             ></ColumnDirective>
             <ColumnDirective
               field="TaskName"
-              headerText="Title"
+              headerText="Projects"
               width="250"
+              template={projectTemplate}
             ></ColumnDirective>
             <ColumnDirective
               field="resources"
@@ -602,12 +644,12 @@ const Overview = () => {
               width="120"
             ></ColumnDirective>
           </ColumnsDirective>
-          <EventMarkersDirective>
+          {/* <EventMarkersDirective>
             <EventMarkerDirective
               day={eventMarkerDay1}
               label="Q-1 Release"
             ></EventMarkerDirective>
-          </EventMarkersDirective>
+          </EventMarkersDirective> */}
           {/* <HolidaysDirective>
             <HolidayDirective
               from="01/01/2024"
@@ -635,7 +677,7 @@ const Overview = () => {
           />
         </GanttComponent>
       </div>
-      <EditDialog open={open} onClose={handleClose} />
+      <EditDialog open={open} onClose={handleClose} data={dialogData} />
     </div>
   );
 };
