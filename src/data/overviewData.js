@@ -19,6 +19,8 @@ export let overviewData = [
     Progress: 100,
     Status: "Completed",
     ParentId: 1,
+    Predecessor: "8FS",
+    Component: "Grid"
   },
   {
     TaskId: "3",

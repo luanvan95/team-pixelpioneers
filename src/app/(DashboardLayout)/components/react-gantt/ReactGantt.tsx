@@ -103,7 +103,7 @@ const Overview = () => {
     },
     bottomTier: {
       unit: "Day",
-      count: 4,
+    //   count: 4,
       format: "dd",
     },
   };
@@ -488,8 +488,8 @@ const Overview = () => {
   const priorityTemplate = prioritytemplate.bind(this);
 
   const toolbarOptions = [
-    "ExpandAll",
-    "CollapseAll",
+    // "ExpandAll",
+    // "CollapseAll",
     {
       type: "Input",
       align: "Right",
@@ -505,11 +505,19 @@ const Overview = () => {
   ];
 
   const editSettings: any = {
-    allowAdding: true,
-    allowEditing: true,
-    allowDeleting: true,
+    allowAdding: false,
+    allowEditing: false,
+    allowDeleting: false,
     allowTaskbarEditing: true,
-    showDeleteConfirmDialog: true,
+    showDeleteConfirmDialog: false,
+  };
+
+  const rowSelected = ({data} = props): void => {
+    console.log(data);
+  };
+
+  const taskbarEditing = ({data} = props): void => {
+    console.log(data);
   };
 
   return (
@@ -531,14 +539,16 @@ const Overview = () => {
           splitterSettings={splitterSettings}
           height="500px"
           gridLines={gridLines}
-          allowFiltering={true}
+          allowFiltering={false}
           showColumnMenu={true}
-          allowSorting={true}
-          allowResizing={true}
+          allowSorting={false}
+          allowResizing={false}
           toolbar={toolbarOptions}
           resourceFields={resourceFields}
           resources={editingResources}
           allowRowDragAndDrop={false}
+          rowSelected={rowSelected.bind(this)}
+          taskbarEditing={taskbarEditing.bind(this)}
         >
           <ColumnsDirective>
             <ColumnDirective

@@ -16,6 +16,12 @@ const Menuitems = [
   },
   {
     id: uniqueId(),
+    title: "Campaigns",
+    icon: IconAperture,
+    href: "/campaigns",
+  },
+  {
+    id: uniqueId(),
     title: "Sample Page",
     icon: IconAperture,
     href: "/sample-page",
