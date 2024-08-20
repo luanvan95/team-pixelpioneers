@@ -20,18 +20,26 @@ import {
   EditDialogFieldDirective,
   EditDialogFieldsDirective,
 } from "@syncfusion/ej2-react-gantt";
-import { overviewData } from "@/data/overviewData";
 import { editingResources } from "@/data/resourcesData";
 import { DropDownList } from "@syncfusion/ej2-react-dropdowns";
 import { registerLicense } from "@syncfusion/ej2-base";
 import EditDialog from "./EditDialog";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import { IconButton } from "@mui/material";
+import PsychologyIcon from "@mui/icons-material/Psychology";
+
 registerLicense(
   "Ngo9BigBOggjHTQxAR8/V1NCaF1cWWhAYVJ+WmFZfVpgdVdMZF9bR3dPMyBoS35RckVrWHZecHBWRWJfUUZ0"
 );
 
-const Overview = () => {
+function addMonths(date, months) {
+  let newDate = new Date(date);
+  newDate.setMonth(newDate.getMonth() + months);
+  return newDate;
+}
+
+const Overview = ({ dataSource } = props) => {
   let CurrentTheme = true;
   let statusStyleColor;
   let priorityStyle;
@@ -61,15 +69,22 @@ const Overview = () => {
   ];
 
   const taskFields = {
+    // id: "TaskId",
+    // name: "TaskName",
+    // startDate: "StartDate",
+    // endDate: "EndDate",
+    // duration: "TimeLog",
+    // progress: "Progress",
+    // dependency: "Predecessor",
+    // parentID: "ParentId",
     id: "TaskId",
     name: "TaskName",
     startDate: "StartDate",
-    endDate: "EndDate",
-    duration: "TimeLog",
-    progress: "Progress",
+    duration: "Duration",
     dependency: "Predecessor",
-    parentID: "ParentId",
+    progress: "Progress",
     resourceInfo: "Assignee",
+    child: "SubTasks",
   };
 
   const resourceFields = {
@@ -81,9 +96,13 @@ const Overview = () => {
     position: "57%",
   };
 
-  const projectStartDate = new Date("12/17/2023");
-  const projectEndDate = new Date("10/26/2024");
-  const gridLines = "Vertical";
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const [nextMonthDate, setNextMonthDate] = useState(addMonths(new Date(), 1));
+
+  const projectStartDate = currentDate;
+  const projectEndDate = nextMonthDate;
+
+  const gridLines = "Both";
 
   const change = (args) => {
     let gantt = document.getElementsByClassName("e-gantt")[0].ej2_instances[0];
@@ -95,6 +114,30 @@ const Overview = () => {
       gantt.setSplitterPosition("57%", "position");
     }
   };
+
+  //   const timelineSettings: any = {
+  //     timelineUnitSize: 50,
+  //     topTier: {
+  //       unit: 'Month',
+  //       format: 'MMM dd, y',
+  //     },
+  //     bottomTier: {
+  //       unit: 'Day',
+  //       formatter: (date: Date) => {
+  //         let month: number = date.getMonth();
+  //         if (month === 1) {
+  //           return '';
+  //         } else {
+  //           let presentDate: Date = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  //           let start: Date = new Date(presentDate.getFullYear(), 0, 0);
+  //           let diff: number = Number(presentDate) - Number(start);
+  //           let oneDay: number = 1000 * 60 * 60 * 24;
+  //           let day: number = Math.floor(diff / oneDay);
+  //           return 'day ' + (day - 59);
+  //         }
+  //       },
+  //     },
+  //   };
 
   const timelineSettings = {
     showTooltip: true,
@@ -114,7 +157,19 @@ const Overview = () => {
     rightLabel: "Assignee",
   };
 
-  const eventMarkerDay1 = new Date("04/04/2024");
+  const projectTemplate = (props) => {
+    const { AIGenerator } = props.taskData;
+    return (
+      <div style={{ display: "inline-flex", alignItems: "center" }}>
+        {props.TaskName}
+        {AIGenerator && (
+          <IconButton onClick={handleClickOpen(props.taskData)}>
+            <PsychologyIcon />
+          </IconButton>
+        )}
+      </div>
+    );
+  };
 
   const statustemplate = (props) => {
     let sts = Status(props.taskData.Status);
@@ -191,17 +246,20 @@ const Overview = () => {
   };
 
   const columnTemplate = (props) => {
-    var src =
-      "https://ej2.syncfusion.com/react/demos/https://ej2.syncfusion.com/react/demos/src/gantt/images/" +
-      props.ganttProperties.resourceNames +
-      ".png";
+    const { taskData } = props || {};
+    // console.log(props.ganttProperties);
+
+    // var src =
+    //   "https://ej2.syncfusion.com/react/demos/https://ej2.syncfusion.com/react/demos/src/gantt/images/" +
+    //   props.ganttProperties.resourceNames +
+    //   ".png";
     if (props.ganttProperties.resourceNames) {
       let gantt =
         document.getElementsByClassName("e-gantt")[0].ej2_instances[0];
       if (gantt.enableRtl) {
         return (
           <div className="columnTemplate">
-            <img src={src} height="25px" width="25px" />
+            {/* <img src={src} height="25px" width="25px" /> */}
             <div
               style={{
                 display: "inline-block",
@@ -218,7 +276,7 @@ const Overview = () => {
       } else {
         return (
           <div className="columnTemplate">
-            <img src={src} height="25px" width="25px" />
+            {/* <img src={src} height="25px" width="25px" /> */}
             <div
               style={{
                 display: "inline-block",
@@ -482,19 +540,23 @@ const Overview = () => {
     };
   };
 
-  const load = () => {};
+  const load = () => {
+  };
 
   const template = columnTemplate.bind(this);
   const statusTemplate = statustemplate.bind(this);
   const priorityTemplate = prioritytemplate.bind(this);
 
   const [open, setOpen] = useState(false);
+  const [dialogData, setDialogData] = useState(null);
 
-  const handleClickOpen = () => {
+  const handleClickOpen = (data) => () => {
+    setDialogData(data);
     setOpen(true);
   };
 
   const handleClose = () => {
+    setDialogData(null);
     setOpen(false);
   };
 
@@ -523,119 +585,109 @@ const Overview = () => {
     showDeleteConfirmDialog: false,
   };
 
-  const rowSelected = ({ data } = props): void => {
-    console.log(data);
-    handleClickOpen();
-  };
-
-  const taskbarEditing = ({ data } = props): void => {
-    console.log(data);
-  };
-
   return (
     <div className="control-pane">
       <div className="control-section">
         <GanttComponent
-          id="Overview"
-          dataSource={overviewData}
-          treeColumnIndex={1}
-          allowSelection={true}
-          editSettings={editSettings}
-          highlightWeekends={true}
-          projectStartDate={projectStartDate}
-          projectEndDate={projectEndDate}
-          load={load.bind(this)}
-          taskFields={taskFields}
-          timelineSettings={timelineSettings}
-          labelSettings={labelSettings}
-          splitterSettings={splitterSettings}
-          height="500px"
-          gridLines={gridLines}
-          allowFiltering={false}
-          showColumnMenu={true}
-          allowSorting={false}
-          allowResizing={false}
-          toolbar={toolbarOptions}
-          resourceFields={resourceFields}
-          resources={editingResources}
-          allowRowDragAndDrop={false}
-          rowSelected={rowSelected.bind(this)}
-          taskbarEditing={taskbarEditing.bind(this)}
+        id="Overview"
+        dataSource={dataSource}
+        treeColumnIndex={1}
+        allowSelection={true}
+        editSettings={editSettings}
+        highlightWeekends={true}
+        projectStartDate={projectStartDate}
+        projectEndDate={projectEndDate}
+        load={load.bind(this)}
+        taskFields={taskFields}
+        timelineSettings={timelineSettings}
+        labelSettings={labelSettings}
+        splitterSettings={splitterSettings}
+        //   height="100%"
+        gridLines={gridLines}
+        allowFiltering={false}
+        showColumnMenu={true}
+        allowSorting={false}
+        allowResizing={true}
+        toolbar={toolbarOptions}
+        resourceFields={resourceFields}
+        resources={editingResources}
+        allowRowDragAndDrop={false}
         >
-          <ColumnsDirective>
+        <ColumnsDirective>
             <ColumnDirective
-              field="TaskId"
-              headerText="Task Id"
-              width="180"
-              visible={false}
+            field="TaskId"
+            headerText="Task Id"
+            width="180"
+            visible={false}
             ></ColumnDirective>
             <ColumnDirective
-              field="TaskName"
-              headerText="Title"
-              width="250"
+            field="TaskName"
+            headerText="Projects"
+            width="250"
+            template={projectTemplate}
             ></ColumnDirective>
             <ColumnDirective
-              field="resources"
-              headerText="Assignee"
-              allowSorting={false}
-              width="140"
-              template={template}
+            field="resources"
+            headerText="Assignee"
+            allowSorting={false}
+            width="140"
+            template={template}
             ></ColumnDirective>
             <ColumnDirective
-              field="Status"
-              headerText="Status"
-              minWidth="100"
-              width="120"
-              template={statusTemplate}
+            field="Status"
+            headerText="Status"
+            minWidth="100"
+            width="120"
+            template={statusTemplate}
             ></ColumnDirective>
             <ColumnDirective
-              field="Priority"
-              headerText="Priority"
-              minWidth="80"
-              width="100"
-              template={priorityTemplate}
+            field="Priority"
+            headerText="Priority"
+            minWidth="80"
+            width="100"
+            template={priorityTemplate}
             ></ColumnDirective>
 
             <ColumnDirective
-              field="TimeLog"
-              headerText="Work Log"
-              width="120"
+            field="TimeLog"
+            headerText="Work Log"
+            width="120"
             ></ColumnDirective>
-          </ColumnsDirective>
-          <EventMarkersDirective>
-            <EventMarkerDirective
-              day={eventMarkerDay1}
-              label="Q-1 Release"
-            ></EventMarkerDirective>
-          </EventMarkersDirective>
-          {/* <HolidaysDirective>
-            <HolidayDirective
-              from="01/01/2024"
-              to="01/01/2024"
-              label="New year Holiday"
-            ></HolidayDirective>
-            <HolidayDirective
-              from="12/25/2023"
-              to="12/26/2023"
-              label="Christmas Holidays"
-            ></HolidayDirective>
-          </HolidaysDirective> */}
-          <Inject
+        </ColumnsDirective>
+        {/* <EventMarkersDirective>
+        <EventMarkerDirective
+            day={eventMarkerDay1}
+            label="Q-1 Release"
+        ></EventMarkerDirective>
+        </EventMarkersDirective> */}
+        {/* <HolidaysDirective>
+        <HolidayDirective
+            from="01/01/2024"
+            to="01/01/2024"
+            label="New year Holiday"
+        ></HolidayDirective>
+        <HolidayDirective
+            from="12/25/2023"
+            to="12/26/2023"
+            label="Christmas Holidays"
+        ></HolidayDirective>
+        </HolidaysDirective> */}
+        <Inject
             services={[
-              Edit,
-              Selection,
-              Toolbar,
-              DayMarkers,
-              ColumnMenu,
-              Filter,
-              Sort,
-              Resize,
-              RowDD,
+            Edit,
+            Selection,
+            Toolbar,
+            DayMarkers,
+            ColumnMenu,
+            Filter,
+            Sort,
+            Resize,
+            RowDD,
             ]}
-          />
+        />
         </GanttComponent>
       </div>
-      <EditDialog open={open} onClose={handleClose} />
+      <EditDialog open={open} onClose={handleClose} data={dialogData} />
     </div>
   );
 };

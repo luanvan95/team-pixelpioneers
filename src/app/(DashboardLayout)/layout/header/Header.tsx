@@ -22,8 +22,6 @@ interface ItemType {
 }
 
 const Header = ({ isMobileSidebarOpen, toggleMobileSidebar }: ItemType) => {
-  console.log(isMobileSidebarOpen);
-
   // const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));
   // const lgDown = useMediaQuery((theme) => theme.breakpoints.down('lg'));
 
