@@ -7,10 +7,16 @@ import PsychologyIcon from "@mui/icons-material/Psychology";
 import { overviewData, overviewAIData } from "@/data/overviewData";
 import { useEffect, useLayoutEffect, useState } from "react";
 import LoadingPopup from "@/app/(DashboardLayout)/components/shared/LoadingPopup";
-import { postRequest1, postRequest2, postRequest3 } from '@/lib/api';
+import {
+  generateCaptions,
+  generateHashTag,
+  generateSlogan,
+  generateImages,
+} from "@/utils/lib/api";
+import { useRouter } from "next/navigation";
 
-
-const SamplePage2 = () => {
+const SamplePage2 = ({ params }) => {
+  const router = useRouter();
   const [displayButton, setDisplayButton] = useState(true);
   const [isPopupOpen, setPopupOpen] = useState(false);
 
@@ -19,17 +25,24 @@ const SamplePage2 = () => {
       setPopupOpen(true);
       // call API to generate data
       try {
-        // const [result1, result2, result3] = await Promise.all([
-        //   postRequest1(data1),
-        //   postRequest2(data2),
-        //   postRequest3(data3),
-        // ]);
-  
-        // console.log('Result from endpoint1:', result1);
-        // console.log('Result from endpoint2:', result2);
-        // console.log('Result from endpoint3:', result3);
+        const [result1, result2, result3] = await Promise.all([
+          generateSlogan({ campaign_id: params.id }),
+          generateHashTag({ campaign_id: params.id }),
+          generateImages({
+            campaign_id: params.id,
+            design:
+            "Modern minimalistic with warm tones, palm leaves, opened coconuts and lavander surrounding the bar of soap",
+          }),
+          // generateCaptions({ campaign_id: params.id }),
+        ]);
+      
+        console.log("Result from endpoint1:", result1);
+        console.log("Result from endpoint1:", result2);
+        console.log("Result from endpoint1:", result3);
+        // console.log("Result from endpoint1:", result4);
+        handleClosePopup();
       } catch (error) {
-        console.error('Error during POST requests:', error);
+        console.error("Error during POST requests:", error);
       }
     }
   };
@@ -47,8 +60,12 @@ const SamplePage2 = () => {
         onActionButtonClick={handleActionButtonClick}
       >
         <Box display="flex" flexDirection="column" height="100%">
-          {(displayButton || isPopupOpen) && <ReactGantt dataSource={overviewData} />}
-          {!displayButton && !isPopupOpen && <ReactGantt dataSource={overviewAIData} />}
+          {(displayButton || isPopupOpen) && (
+            <ReactGantt dataSource={overviewData} />
+          )}
+          {!displayButton && !isPopupOpen && (
+            <ReactGantt dataSource={overviewAIData} />
+          )}
           <LoadingPopup open={isPopupOpen} onClose={handleClosePopup} />
         </Box>
       </DashboardCard>
