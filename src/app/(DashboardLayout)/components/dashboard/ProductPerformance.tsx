@@ -14,8 +14,6 @@ import {
 import DashboardCard from '@/app/(DashboardLayout)//components/shared/DashboardCard';
 import React, { useEffect, useState } from 'react';
 
-import { useRouter } from 'next/router';
-
 const style = {
     position: 'absolute' as 'absolute',
     top: '50%',
@@ -28,11 +26,16 @@ const style = {
     p: 4,
   };
 
+import { useRouter } from 'next/navigation';
+ 
 const ProductPerformance = () => {
 
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+
+    const router = useRouter()
+
   
     const [productList, setProductList] = React.useState([]);
 
@@ -69,6 +72,7 @@ const ProductPerformance = () => {
         const content = await rawResponse.json();
     
         console.log(content);
+        router.push(`/campaigns/${content.campaign_id}`)
         setOpen(false);
     }
 
