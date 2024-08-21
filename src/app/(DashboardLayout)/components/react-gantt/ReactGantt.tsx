@@ -95,7 +95,7 @@ const Overview = ({ campaignName, dataSource, aiGeneratedData } = props) => {
   };
 
   const splitterSettings = {
-    position: "57%",
+    position: "400px",
   };
 
   const [currentDate, setCurrentDate] = useState(new Date());

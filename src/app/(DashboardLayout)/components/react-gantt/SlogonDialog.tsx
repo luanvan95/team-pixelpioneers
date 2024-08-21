@@ -109,21 +109,27 @@ const SlogonDialog: React.FC<SlogonDialogProps> = ({
           </Typography>
           <Box mb={3}>
             <TextField
+              style={{
+                color: "#51585e"
+              }}
               margin="dense"
               label="Caption"
               fullWidth
               variant="outlined"
               value={field1}
-              disabled
+              // disabled
               sx={{ mb: 2 }}
             />
             <TextField
+            style={{
+              color: "#51585e"
+            }}
               margin="dense"
               label="Slogan"
               fullWidth
               variant="outlined"
               value={field2}
-              disabled
+              // disabled
             />
           </Box>
         </Box>
@@ -140,8 +146,7 @@ const SlogonDialog: React.FC<SlogonDialogProps> = ({
           <HashtagsDisplay hashtags={hashtags} />
         </Box>
 
-        Image Gallery
-        {imageUrls.length > 0 && (
+        {/* {imageUrls.length > 0 && (
           <Box mt={3}>
             <Typography variant="h6" mb={2}>
               Image Gallery
@@ -168,7 +173,7 @@ const SlogonDialog: React.FC<SlogonDialogProps> = ({
               ))}
             </Grid>
           </Box>
-        )}
+        )} */}
       </DialogContent>
 
       <DialogActions>
