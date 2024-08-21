@@ -1,4 +1,4 @@
-export let overviewData = [
+export const overviewData = [
   {
     TaskId: 1,
     TaskName: "Campaign A",
@@ -20,7 +20,8 @@ export let overviewData = [
         SubTasks: [
           {
             TaskId: "cw_1",
-            TaskName: "Preparation",
+        AIGenerator: true,
+        TaskName: "Preparation",
             Assignee: [],
             Duration: 2,
             Progress: 0,

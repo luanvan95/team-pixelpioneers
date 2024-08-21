@@ -31,7 +31,6 @@ interface FullScreenDialogProps {
   open: boolean;
   onClose: () => void;
   data: Data | null;
-  title: String | null;
 }
 
 const Transition = React.forwardRef(function Transition(
@@ -62,17 +61,15 @@ const FullScreenDialog: React.FC<FullScreenDialogProps> = ({
   open,
   onClose,
   data,
-  title,
 }) => {
-  console.log(title, data);
   const [tabValue, setTabValue] = useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
   };
 
-  const [field1, setField1] = useState(data?.field1 || "a");
-  const [field2, setField2] = useState(data?.field2 || "b");
+  const [field1, setField1] = useState(data?.field1 || "");
+  const [field2, setField2] = useState(data?.field2 || "");
 
   const handleField1Change = (event: ChangeEvent<HTMLInputElement>) => {
     setField1(event.target.value);

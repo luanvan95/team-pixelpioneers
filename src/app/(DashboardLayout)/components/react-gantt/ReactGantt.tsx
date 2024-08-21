@@ -28,6 +28,7 @@ import EditDialog from "./EditDialog";
 import { useEffect, useState, useRef } from "react";
 import { IconButton } from "@mui/material";
 import PsychologyIcon from "@mui/icons-material/Psychology";
+import SlogonDialog from "./SlogonDialog";
 
 registerLicense(
   "Ngo9BigBOggjHTQxAR8/V1NCaF1cWWhAYVJ+WmFZfVpgdVdMZF9bR3dPMyBoS35RckVrWHZecHBWRWJfUUZ0"
@@ -160,10 +161,10 @@ const Overview = ({ campaignName, dataSource } = props) => {
   const projectTemplate = (props) => {
     const { index, level, taskData } = props;
     const { AIGenerator } = taskData;
-    
+
     return (
       <div style={{ display: "inline-flex", alignItems: "center" }}>
-        { (index == 0 && level == 0) ? campaignName : props.TaskName}
+        {index == 0 && level == 0 ? campaignName : props.TaskName}
         {AIGenerator && (
           <IconButton onClick={handleClickOpen(props.taskData)}>
             <PsychologyIcon />
@@ -548,13 +549,12 @@ const Overview = ({ campaignName, dataSource } = props) => {
   const statusTemplate = statustemplate.bind(this);
   const priorityTemplate = prioritytemplate.bind(this);
 
-  const [open, setOpen] = useState(false);
+  const [open, setOpen]: any = useState(false);
   const [dialogData, setDialogData] = useState(null);
 
   const handleClickOpen = (data) => () => {
-    console.log(data);
     setDialogData(data);
-    setOpen(true);
+    setOpen(data.TaskId);
   };
 
   const handleClose = () => {
@@ -689,7 +689,13 @@ const Overview = ({ campaignName, dataSource } = props) => {
           />
         </GanttComponent>
       </div>
-      <EditDialog open={open} onClose={handleClose} data={dialogData} />
+      {/* <EditDialog open={open === 'cw_1'} onClose={handleClose} data={dialogData} /> */}
+      <SlogonDialog
+        title="Content Writing"
+        open={open === "cw_1"}
+        onClose={handleClose}
+        data={dialogData}
+      />
     </div>
   );
 };
