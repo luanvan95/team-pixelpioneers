@@ -23,12 +23,13 @@ import {
 import { editingResources } from "@/data/resourcesData";
 import { DropDownList } from "@syncfusion/ej2-react-dropdowns";
 import { registerLicense } from "@syncfusion/ej2-base";
-import EditDialog from "./EditDialog";
 
 import { useEffect, useState, useRef } from "react";
 import { IconButton } from "@mui/material";
 import PsychologyIcon from "@mui/icons-material/Psychology";
+
 import SlogonDialog from "./SlogonDialog";
+import DesignCreationDialog from "./DesignCreationDialog";
 
 registerLicense(
   "Ngo9BigBOggjHTQxAR8/V1NCaF1cWWhAYVJ+WmFZfVpgdVdMZF9bR3dPMyBoS35RckVrWHZecHBWRWJfUUZ0"
@@ -694,6 +695,12 @@ const Overview = ({ campaignName, dataSource, aiGeneratedData } = props) => {
       <SlogonDialog
         title="Content Writing"
         open={open === "cw_1"}
+        onClose={handleClose}
+        data={aiGeneratedData}
+      />
+      <DesignCreationDialog
+        title="Design Generator"
+        open={open === "dc_1"}
         onClose={handleClose}
         data={aiGeneratedData}
       />

@@ -53,8 +53,8 @@ const SamplePage2 = ({ params }) => {
       setPopupOpen(true);
       // call API to generate data
       try {
-          // const [result1, result2, result3] = await Promise.all([
-          const [result1, result2, result3, result4] = await Promise.all([
+        // const [result1, result2, result3] = await Promise.all([
+        const [result1, result2, result3, result4] = await Promise.all([
           generateCaptions({ campaign_id: params.id }),
           generateSlogan({ campaign_id: params.id }),
           generateHashTag({ campaign_id: params.id }),
@@ -69,8 +69,8 @@ const SamplePage2 = ({ params }) => {
           captions: result1.captions,
           slogons: result2.slogans,
           hashtags: result3.hashtags,
-          imageUrls: result4.image_urls ,
-        })
+          imageUrls: result4.image_urls,
+        });
 
         handleClosePopup();
       } catch (error) {

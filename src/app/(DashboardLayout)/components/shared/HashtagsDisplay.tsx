@@ -17,7 +17,7 @@ const HashtagsDisplay: React.FC<HashtagsDisplayProps> = ({ hashtags }) => {
           New Creative Hashtags
         </Typography>
         <Stack direction="row" spacing={1} flexWrap="wrap">
-          {hashtags.new_creative_hashtags.map((hashtag, index) => (
+          {hashtags.new_creative_hashtags && hashtags.new_creative_hashtags.map((hashtag, index) => (
             <Chip key={index} label={hashtag} />
           ))}
         </Stack>
@@ -29,7 +29,7 @@ const HashtagsDisplay: React.FC<HashtagsDisplayProps> = ({ hashtags }) => {
           Current Trending Hashtags
         </Typography>
         <Stack direction="row" spacing={1} flexWrap="wrap">
-          {hashtags.current_trending_hashtags.map((hashtag, index) => (
+          {hashtags.current_trending_hashtags && hashtags.current_trending_hashtags.map((hashtag, index) => (
             <Chip key={index} label={hashtag} />
           ))}
         </Stack>
