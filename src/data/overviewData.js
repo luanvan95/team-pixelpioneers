@@ -1,4 +1,4 @@
-export let overviewData = [
+export const overviewData = [
   {
     TaskId: 1,
     TaskName: "Campaign A",
