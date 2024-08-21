@@ -89,8 +89,26 @@ const DashboardCard = ({
                     variant="contained"
                     onClick={handleClick}
                     endIcon={<PsychologyIcon />}
+                    sx={{
+                      fontSize: "16px",
+                      boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+                      borderRadius: "8px",
+                      transition:
+                        "background-color 0.3s, transform 0.3s, box-shadow 0.3s",
+                      "&:hover": {
+                        backgroundColor: "#003d79",
+                        boxShadow: "0 6px 8px rgba(0, 0, 0, 0.2)",
+                        transform: "scale(1.05)",
+                        color: "#fff",
+                      },
+                      "&:active": {
+                        backgroundColor: "#002c61",
+                        transform: "scale(0.98)",
+                      },
+                      animation: "pulse 1.5s infinite", // Add pulse animation
+                    }}
                   >
-                    Generate with AI
+                    Generate with
                   </Button>
                 )}
               </Box>

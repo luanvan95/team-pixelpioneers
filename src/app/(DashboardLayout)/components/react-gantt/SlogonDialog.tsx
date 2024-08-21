@@ -36,10 +36,25 @@ const SlogonDialog: React.FC<SlogonDialogProps> = ({
   data,
   title = "",
 }) => {
+  const [loading, setLoading] = useState<boolean>(false);
+  
   const [field1, setField1] = useState(data?.captions[0] || "");
   const [field2, setField2] = useState(data?.slogons[0] || "");
   const [hashtags, setField3] = useState(data?.hashtags || []);
   const [imageUrls, setField4] = useState(data?.imageUrls || []);
+
+  const handleAIGenerate = async () => {
+    setLoading(true); // Start loading
+    try {
+      // Simulate a data generation process with a delay
+      setTimeout(() => {
+        console.log("Data generated");
+        setLoading(false); // Stop loading after the function completes
+      }, 2000); // Adjust delay as needed
+    } finally {
+      // setLoading(false); // Stop loading after the function completes
+    }
+  };
 
   const handleSave = () => {
     // onSave({ field1, field2 });
@@ -90,7 +105,7 @@ const SlogonDialog: React.FC<SlogonDialogProps> = ({
           color="inherit"
           onClick={onClose}
           aria-label="close"
-          sx={{ position: "absolute", right: 8, top: 8 }}
+          sx={{ position: "absolute", right: 15, top: 8 }}
         >
           <CloseIcon />
         </IconButton>
@@ -110,7 +125,7 @@ const SlogonDialog: React.FC<SlogonDialogProps> = ({
           <Box mb={3}>
             <TextField
               style={{
-                color: "#51585e"
+                color: "#51585e",
               }}
               margin="dense"
               label="Caption"
@@ -121,9 +136,9 @@ const SlogonDialog: React.FC<SlogonDialogProps> = ({
               sx={{ mb: 2 }}
             />
             <TextField
-            style={{
-              color: "#51585e"
-            }}
+              style={{
+                color: "#51585e",
+              }}
               margin="dense"
               label="Slogan"
               fullWidth
@@ -145,6 +160,41 @@ const SlogonDialog: React.FC<SlogonDialogProps> = ({
           </Typography>
           <HashtagsDisplay hashtags={hashtags} />
         </Box>
+
+        <Box mt={2} display="flex" justifyContent="center">
+              <Button
+                // variant="contained"
+                color="primary"
+                onClick={handleAIGenerate}
+                sx={{
+                  padding: "12px 24px",
+                  fontSize: "16px",
+                  boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+                  borderRadius: "8px",
+                  transition:
+                    "background-color 0.3s, transform 0.3s, box-shadow 0.3s",
+                  "&:hover": {
+                    backgroundColor: "#003d79",
+                    boxShadow: "0 6px 8px rgba(0, 0, 0, 0.2)",
+                    transform: "scale(1.05)",
+                    color: "#fff",
+                  },
+                  "&:active": {
+                    backgroundColor: "#002c61",
+                    transform: "scale(0.98)",
+                  },
+                  animation: "pulse 1.5s infinite", // Add pulse animation
+                }}
+                disabled={loading} // Disable button while loading
+                endIcon={
+                  loading ? (
+                    <CircularProgress size={24} color="inherit" />
+                  ) : undefined
+                }
+              >
+                {loading ? "Generating..." : "Regenerate Content"}
+              </Button>
+            </Box>
 
         {/* {imageUrls.length > 0 && (
           <Box mt={3}>
@@ -176,14 +226,14 @@ const SlogonDialog: React.FC<SlogonDialogProps> = ({
         )} */}
       </DialogContent>
 
-      <DialogActions>
+      {/* <DialogActions sx={{ padding: "15px" }}>
         <Button variant="text" onClick={onClose} color="error">
           Cancel
         </Button>
         <Button variant="contained" onClick={handleSave} color="primary">
           Save
         </Button>
-      </DialogActions>
+      </DialogActions> */}
     </Dialog>
   );
 };
