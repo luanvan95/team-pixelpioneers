@@ -19,7 +19,7 @@ const SamplePage2 = ({ params }) => {
   const [displayButton, setDisplayButton] = useState(true);
   const [isPopupOpen, setPopupOpen] = useState(false);
   const [campaign, setCampaign]: any = useState();
-  const [dataSource, setDataSource]: any = useState();
+  const [apiData, setApiData]: any = useState();
 
   const fetchCampaign = async (id) => {
     try {
@@ -53,8 +53,9 @@ const SamplePage2 = ({ params }) => {
       setPopupOpen(true);
       // call API to generate data
       try {
-        const [result1, result2, result3] = await Promise.all([
-        // const [result1, result2, result3] = await Promise.all([
+          // const [result1, result2, result3] = await Promise.all([
+          const [result1, result2, result3, result4] = await Promise.all([
+          generateCaptions({ campaign_id: params.id }),
           generateSlogan({ campaign_id: params.id }),
           generateHashTag({ campaign_id: params.id }),
           generateImages({
@@ -62,13 +63,15 @@ const SamplePage2 = ({ params }) => {
             design:
               "Modern minimalistic with warm tones, palm leaves, opened coconuts and lavander surrounding the bar of soap",
           }),
-          // generateCaptions({ campaign_id: params.id }),
         ]);
 
-        console.log("Result from endpoint1:", result1);
-        console.log("Result from endpoint1:", result2);
-        console.log("Result from endpoint1:", result3);
-        // console.log("Result from endpoint1:", result4);
+        setApiData({
+          captions: result1.captions,
+          slogons: result2.slogans,
+          hashtags: result3.hashtags,
+          imageUrls: result4.image_urls ,
+        })
+
         handleClosePopup();
       } catch (error) {
         console.error("Error during POST requests:", error);
@@ -106,6 +109,7 @@ const SamplePage2 = ({ params }) => {
               <ReactGantt
                 campaignName={campaign.campaign_name}
                 dataSource={overviewAIData}
+                aiGeneratedData={apiData}
               />
             )}
             <LoadingPopup open={isPopupOpen} onClose={handleClosePopup} />

@@ -40,7 +40,7 @@ function addMonths(date, months) {
   return newDate;
 }
 
-const Overview = ({ campaignName, dataSource } = props) => {
+const Overview = ({ campaignName, dataSource, aiGeneratedData } = props) => {
   let CurrentTheme = true;
   let statusStyleColor;
   let priorityStyle;
@@ -695,7 +695,7 @@ const Overview = ({ campaignName, dataSource } = props) => {
         title="Content Writing"
         open={open === "cw_1"}
         onClose={handleClose}
-        data={dialogData}
+        data={aiGeneratedData}
       />
     </div>
   );
