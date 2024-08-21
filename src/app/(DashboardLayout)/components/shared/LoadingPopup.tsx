@@ -20,6 +20,7 @@ const LoadingPopup: React.FC<LoadingPopupProps> = ({ open, onClose }) => {
         {open && (
           <div
             style={{
+              width: "200px",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",

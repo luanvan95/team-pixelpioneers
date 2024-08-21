@@ -96,7 +96,7 @@ export let overviewData = [
           {
             AIGenerator: true,
             TaskId: "mc_landing",
-            TaskName: "Landing Page",
+            TaskName: "Landing Page Preparation",
             Duration: 2,
             Progress: 0,
             Predecessor: "",
@@ -104,7 +104,7 @@ export let overviewData = [
           {
             AIGenerator: true,
             TaskId: "mc_email",
-            TaskName: "Email",
+            TaskName: "Email Preparation",
             Duration: 2,
             Progress: 0,
             Predecessor: "",
@@ -227,17 +227,17 @@ export let overviewAIData = [
           {
             AIGenerator: true,
             TaskId: "mc_landing",
-            TaskName: "Landing Page",
+            TaskName: "Landing Page Preparati",
             Duration: 1,
-            Progress: 0,
+            Progress: 100,
             Predecessor: "",
           },
           {
             AIGenerator: true,
             TaskId: "mc_email",
-            TaskName: "Email",
+            TaskName: "Email Preparation",
             Duration: 1,
-            Progress: 0,
+            Progress: 100,
             Predecessor: "",
           },
           {
