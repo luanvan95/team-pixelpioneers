@@ -13,7 +13,7 @@ const HashtagsDisplay: React.FC<HashtagsDisplayProps> = ({ hashtags }) => {
     <Box>
       {/* Display New Creative Hashtags */}
       <Box mb={2}>
-        <Typography variant="subtitle1" mb={1} fontWeight={600}>
+        <Typography variant="h6" mb={1}>
           New Creative Hashtags
         </Typography>
         <Stack direction="row" spacing={1} flexWrap="wrap">
@@ -25,7 +25,7 @@ const HashtagsDisplay: React.FC<HashtagsDisplayProps> = ({ hashtags }) => {
 
       {/* Display Current Trending Hashtags */}
       <Box>
-        <Typography variant="subtitle1" mb={1} fontWeight={600}>
+        <Typography variant="h6" mb={1}>
           Current Trending Hashtags
         </Typography>
         <Stack direction="row" spacing={1} flexWrap="wrap">

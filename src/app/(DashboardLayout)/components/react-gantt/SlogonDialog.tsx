@@ -84,7 +84,7 @@ const SlogonDialog: React.FC<SlogonDialogProps> = ({
           paddingBottom: "0px",
         }}
       >
-        <Typography variant="h5">{title}</Typography>
+        {title}
         <IconButton
           edge="end"
           color="inherit"
@@ -105,7 +105,7 @@ const SlogonDialog: React.FC<SlogonDialogProps> = ({
           sx={{ borderRadius: "8px", boxShadow: 1, backgroundColor: "#f5f5f5" }}
         >
           <Typography variant="h6" mb={2}>
-            Content
+            Content Detail
           </Typography>
           <Box mb={3}>
             <TextField

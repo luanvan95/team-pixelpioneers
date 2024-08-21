@@ -626,7 +626,7 @@ const Overview = ({ campaignName, dataSource } = props) => {
             <ColumnDirective
               field="TaskName"
               headerText="Projects"
-              width="250"
+              width="280"
               template={projectTemplate}
             ></ColumnDirective>
             <ColumnDirective
